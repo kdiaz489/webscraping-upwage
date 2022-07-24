@@ -41,11 +41,8 @@ def scrapeIndeedJobs():
                 print(f'{record[5]} is not expired. Scraping... ')
 
                 job_title = soup.find('div', class_='jobsearch-JobInfoHeader-title-container').h1.text.replace("'", "")
-
-
                 job_description = soup.find('div', class_='jobsearch-jobDescriptionText').text.replace("'", "")
                 posted_date = soup.find('span', class_='jobsearch-HiringInsights-entry--text').text
-                
                 
                 update_script = (f"UPDATE jobs SET expired_date = '{today}', title = quote_literal('{job_title}'), job_description = quote_literal('{job_description}'), posted_date = '{posted_date}' WHERE id = {record[0]}")
                 cur.execute(update_script)
@@ -55,9 +52,6 @@ def scrapeIndeedJobs():
                 print(f"{record[5]} is expired! Updating expired_date to '{today}'")
                 update_script = (f"UPDATE jobs SET expired_date = '{today}' WHERE id = {record[0]}")
                 cur.execute(update_script)
-                
-                
-                
 
         conn.commit()
             
