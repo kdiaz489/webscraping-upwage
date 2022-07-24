@@ -32,7 +32,9 @@ def scrapeIndeedJobs():
         records = cur.fetchall()
 
         for record in records:
-            html_text = requests.get(record[5]).text
+
+            indeed_job_url = record[5]
+            html_text = requests.get(indeed_job_url).text
             soup = BeautifulSoup(html_text, 'lxml')
             expired_job_header = soup.find('div', class_='jobsearch-JobInfoHeader-expiredHeader')
             today = date.today().strftime("%m/%d/%Y")
@@ -44,11 +46,12 @@ def scrapeIndeedJobs():
                 job_description = soup.find('div', class_='jobsearch-jobDescriptionText').text.replace("'", "")
                 posted_date = soup.find('span', class_='jobsearch-HiringInsights-entry--text').text
                 
-                update_script = (f"UPDATE jobs SET expired_date = '{today}', title = quote_literal('{job_title}'), job_description = quote_literal('{job_description}'), posted_date = '{posted_date}' WHERE id = {record[0]}")
+                update_script = (f"UPDATE jobs SET title = '{job_title}', job_description = '{job_description}', posted_date = '{posted_date}' WHERE id = {record[0]}")
                 cur.execute(update_script)
 
             else:
                 print(f"{record[5]} is expired! Updating expired_date to '{today}'")
+
                 update_script = (f"UPDATE jobs SET expired_date = '{today}' WHERE id = {record[0]}")
                 cur.execute(update_script)
 
