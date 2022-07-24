@@ -43,7 +43,7 @@ Install the following python packages with pip3
 
 ### SQL Query
 
-![DB Screenshot](/Users/karendiaz/Desktop/db.png)
+![DB Screenshot](db.png)
 
 https://dbdiagram.io/d/62dc67c70d66c74655383eef
 
