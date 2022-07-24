@@ -30,12 +30,12 @@ def scrapeIndeedJobs():
 
         cur.execute('SELECT * FROM jobs')
         records = cur.fetchall()
+
         for record in records:
             html_text = requests.get(record[5]).text
             soup = BeautifulSoup(html_text, 'lxml')
             expired_job_header = soup.find('div', class_='jobsearch-JobInfoHeader-expiredHeader')
             today = date.today().strftime("%m/%d/%Y")
-            
 
             if expired_job_header == None:
                 print(f'{record[5]} is not expired. Scraping... ')
@@ -47,7 +47,6 @@ def scrapeIndeedJobs():
                 update_script = (f"UPDATE jobs SET expired_date = '{today}', title = quote_literal('{job_title}'), job_description = quote_literal('{job_description}'), posted_date = '{posted_date}' WHERE id = {record[0]}")
                 cur.execute(update_script)
 
-
             else:
                 print(f"{record[5]} is expired! Updating expired_date to '{today}'")
                 update_script = (f"UPDATE jobs SET expired_date = '{today}' WHERE id = {record[0]}")
@@ -57,8 +56,8 @@ def scrapeIndeedJobs():
             
     
     except Exception as error:
-        print('ERROR')
-        print(error)
+
+        # using this to provide more context to the error
         traceback.print_exc()
 
     finally:
